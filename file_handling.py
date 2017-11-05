@@ -21,13 +21,27 @@ def empty_file(path):
         pass #add nothing to new file
 
 
+# Create set from file, to eliminate duplicates
+def file_to_set(file_path):
+    res = set()
+    with open(file_path, 'rt') as f:
+        for line in f:
+            res.add(line.replace('\n', '')) #don't include linebreaks in urls
+    return res
+
+# Update file to match set
+def set_to_file(set_name, file_path):
+    empty_file()
+    for url in set_name:
+        add_url(file_path, url)
+
 
 ### Setup functions ###
 
-def setup():
+def setup_dir():
     # Create working directory
-    dir_name = 'AU_CS_researchers'
-    crawl_url = 'http://cs.au.dk/research/'
+    #dir_name = 'AU_CS_researchers'
+    #crawl_url = 'http://cs.au.dk/research/'
     if not os.path.exists(dir_name):
         os.makedirs(dir_name)
 
@@ -46,6 +60,3 @@ def initialize_url_lists(folder_name, start_url):
     if not os.path.isfile(crawled):
         write_file(crawled, '')
 
-
-
-setup()
