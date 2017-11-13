@@ -51,5 +51,21 @@ class Spider:
 
         return finder.get_urls()
 
+    @staticmethod
+    def add_urls_to_queue(urls):
+        for url in urls:
+            # if url in Spider.queue_set:
+                # continue
+            # if url in Spider.crawled_set:
+                # continue
+            # if Spider.domain_name not in url:
+                # continue
+            if url in Spider.queue_set or url in Spider.crawled_set or Spider.domain_name not in url:
+                continue
+            Spider.queue_set.add(url)
 
+    @staticmethod
+    def update_files():
+        set_to_file(Spider.queue_set, Spider.queue_file)
+        set_to_file(Spider.crawled_set, Spider.crawled_file)
 
