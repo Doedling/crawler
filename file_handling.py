@@ -31,27 +31,27 @@ def file_to_set(file_path):
 
 # Update file to match set
 def set_to_file(set_name, file_path):
-    empty_file()
+    empty_file(file_path)
     for url in set_name:
         add_url(file_path, url)
 
 
 ### Setup functions ###
 
-def setup_dir():
+def setup_dir(dir_name):
     # Create working directory
     if not os.path.exists(dir_name):
         os.makedirs(dir_name)
 
-    # Make sure there is are files to keep track of urls
-    initialize_url_lists(dir_name, crawl_url)
+    # Make sure there are files to keep track of urls
+    # initialize_url_lists(dir_name, crawl_url)
 
 
 def initialize_url_lists(folder_name, start_url):
     # initialize list of urls to crawl
-    queue = folder_name + '/queue.txt'
-    if not os.path.isfile(queue):
-        write_file(queue, start_url + '\n')
+    waiting = folder_name + '/waiting.txt'
+    if not os.path.isfile(waiting):
+        write_file(waiting, start_url + '\n')
 
     # initialize list of crawled urls
     crawled = folder_name + '/crawled.txt'
