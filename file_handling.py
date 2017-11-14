@@ -38,8 +38,11 @@ def set_to_file(set_name, file_path):
 
 
 def append_set_to_file(set_name, file_path):
+    current_address_set = file_to_set(file_path)
     for address in set_name:
-        add_url(file_path, address)
+        # add_url(file_path, address)
+        current_address_set.add(address)
+    set_to_file(sorted(current_address_set), file_path)
 
 
 ### Setup functions ###

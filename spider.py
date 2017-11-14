@@ -57,14 +57,12 @@ class Spider:
         finder = LinkFinder(Spider.base_url, page_url)
         try:
             response = urlopen(page_url)
-            print('Found: ' + response.getheader('Content-Type'))
             if 'text/html' in response.getheader('Content-Type'):
                 byte_html = response.read()
                 string_html = byte_html.decode('utf-8') #todo: fine?
                 finder.feed(string_html)
         except HTTPError:
             print('HTTP ERROR: crawl unsuccessful - created empty url list from ' + page_url)
-            # traceback.print_exc()
             return set()
 
         Spider.address_set = finder.get_addresses()
@@ -88,7 +86,7 @@ class Spider:
     def add_urls_to_waitinglist(urls):
         for url in urls:
             # if url in Spider.wait_set or url in Spider.crawled_set or Spider.base_url not in url:
-            if url in Spider.wait_set or url in Spider.crawled_set or 'research' not in url:
+            if url in Spider.wait_set or url in Spider.crawled_set or Spider.base_url + 'research' not in url:
                 continue
             Spider.wait_set.add(url)
 
@@ -104,4 +102,5 @@ class Spider:
         set_to_file(Spider.wait_set, Spider.wait_file)
         set_to_file(Spider.crawled_set, Spider.crawled_file)
         append_set_to_file(Spider.address_set, Spider.address_file)
+        # set_to_file(Spider.address_set, Spider.address_file)
 
