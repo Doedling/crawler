@@ -2,7 +2,7 @@ from spider import Spider
 # from domain_locater import *
 from file_handling import *
 
-PROJECT_NAME = 'AU_CS_researchers'
+PROJECT_NAME = 'AU_CS_employees'
 ROOT_URL = 'http://cs.au.dk/'
 # DOMAIN_NAME = get_domain_name(ROOT_URL)
 WAIT_FILE = PROJECT_NAME + '/waiting.txt'
