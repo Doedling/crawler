@@ -3,6 +3,8 @@ from urllib.error import HTTPError
 from link_finder import LinkFinder
 from file_handling import *
 import traceback
+from bs4 import BeautifulSoup
+import requests
 
 class Spider:
 
@@ -44,6 +46,7 @@ class Spider:
             # print(thread_name + ' crawling ' + page_url)
             print(' crawling ' + page_url)
             Spider.add_urls_to_waitinglist(Spider.gather_urls(page_url))
+            # Spider.search_for_urls(page_url)
             Spider.wait_set.remove(page_url)
             Spider.crawled_set.add(page_url)
             Spider.update_files()
@@ -67,13 +70,34 @@ class Spider:
         Spider.address_set = finder.get_addresses()
         return finder.get_urls()
 
+    @staticmethod
+    def search_for_urls(page_url):
+        print('searching url ' + page_url)
+        res = requests.get(page_url)
+        content = res.text
+        soup = BeautifulSoup(content, 'html.parser')
+        for url in soup.find_all('a', 'href'):
+            print('met an url: ' + url)
+            if 'mailto' in url:
+                Spider.address_set.add(url)
+            else:
+                Spider.add_single_url_to_waitinglist(url)
+
 
     @staticmethod
     def add_urls_to_waitinglist(urls):
         for url in urls:
-            if url in Spider.wait_set or url in Spider.crawled_set or Spider.base_url not in url:
+            # if url in Spider.wait_set or url in Spider.crawled_set or Spider.base_url not in url:
+            if url in Spider.wait_set or url in Spider.crawled_set or 'research' not in url:
                 continue
             Spider.wait_set.add(url)
+
+    @staticmethod
+    def add_single_url_to_waitinglist(url):
+        # if url in Spider.wait_set or url in Spider.crawled_set or Spider.base_url not in url:
+        if url in Spider.wait_set or url in Spider.crawled_set or Spider.base_url + 'research' not in url:
+            print('nothing new')
+        Spider.wait_set.add(url)
 
     @staticmethod
     def update_files():
