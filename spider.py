@@ -26,7 +26,6 @@ class Spider:
         Spider.address_file = Spider.project_name + '/addresses.txt'
 
         self.setup()
-        # self.crawl_page('Spider 0', Spider.base_url)
         self.crawl_page(Spider.base_url)
 
     @staticmethod
@@ -37,7 +36,6 @@ class Spider:
         Spider.crawled_set = file_to_set(Spider.crawled_file)
 
     @staticmethod
-    # def crawl_page(thread_name, page_url):
     def crawl_page(page_url):
         if page_url not in Spider.crawled_set:
             print('___crawling ' + page_url)

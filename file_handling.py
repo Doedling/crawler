@@ -52,9 +52,6 @@ def setup_dir(dir_name):
     if not os.path.exists(dir_name):
         os.makedirs(dir_name)
 
-    # Make sure there are files to keep track of urls
-    # initialize_url_lists(dir_name, crawl_url)
-
 
 def initialize_files(folder_name, start_url):
     # initialize list of urls to crawl
