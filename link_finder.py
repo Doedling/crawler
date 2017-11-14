@@ -24,20 +24,6 @@ class LinkFinder(HTMLParser):
                     else:
                         self.urls.add(url)
 
-        elif tag == 'div':
-            self.nested += 1
-
-    # Override
-    def handle_endtag(self, tag):
-        if tag == 'div' and self.nested > 0:
-            self.nested -= 1
-
-    # Override
-    def handle_data(self, data):
-        if self.nested > 0:
-            if 'div' in data:
-                print(data)
-
     def get_urls(self):
         return self.urls
 

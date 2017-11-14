@@ -2,9 +2,6 @@ from urllib.request import urlopen
 from urllib.error import HTTPError
 from link_finder import LinkFinder
 from file_handling import *
-import traceback
-from bs4 import BeautifulSoup
-import requests
 
 class Spider:
 
@@ -43,10 +40,8 @@ class Spider:
     # def crawl_page(thread_name, page_url):
     def crawl_page(page_url):
         if page_url not in Spider.crawled_set:
-            # print(thread_name + ' crawling ' + page_url)
-            print(' crawling ' + page_url)
+            print('___crawling ' + page_url)
             Spider.add_urls_to_waitinglist(Spider.gather_urls(page_url))
-            # Spider.search_for_urls(page_url)
             Spider.wait_set.remove(page_url)
             Spider.crawled_set.add(page_url)
             Spider.update_files()
@@ -59,7 +54,7 @@ class Spider:
             response = urlopen(page_url)
             if 'text/html' in response.getheader('Content-Type'):
                 byte_html = response.read()
-                string_html = byte_html.decode('utf-8') #todo: fine?
+                string_html = byte_html.decode('utf-8')
                 finder.feed(string_html)
         except HTTPError:
             print('HTTP ERROR: crawl unsuccessful - created empty url list from ' + page_url)
@@ -69,38 +64,15 @@ class Spider:
         return finder.get_urls()
 
     @staticmethod
-    def search_for_urls(page_url):
-        print('searching url ' + page_url)
-        res = requests.get(page_url)
-        content = res.text
-        soup = BeautifulSoup(content, 'html.parser')
-        for url in soup.find_all('a', 'href'):
-            print('met an url: ' + url)
-            if 'mailto' in url:
-                Spider.address_set.add(url)
-            else:
-                Spider.add_single_url_to_waitinglist(url)
-
-
-    @staticmethod
     def add_urls_to_waitinglist(urls):
         for url in urls:
-            # if url in Spider.wait_set or url in Spider.crawled_set or Spider.base_url not in url:
             if url in Spider.wait_set or url in Spider.crawled_set or Spider.base_url + 'research' not in url:
                 continue
             Spider.wait_set.add(url)
-
-    @staticmethod
-    def add_single_url_to_waitinglist(url):
-        # if url in Spider.wait_set or url in Spider.crawled_set or Spider.base_url not in url:
-        if url in Spider.wait_set or url in Spider.crawled_set or Spider.base_url + 'research' not in url:
-            print('nothing new')
-        Spider.wait_set.add(url)
 
     @staticmethod
     def update_files():
         set_to_file(Spider.wait_set, Spider.wait_file)
         set_to_file(Spider.crawled_set, Spider.crawled_file)
         append_set_to_file(Spider.address_set, Spider.address_file)
-        # set_to_file(Spider.address_set, Spider.address_file)
 
